@@ -1,17 +1,10 @@
 import {
-  CircleHelp,
-  Trophy,
-  Lightbulb,
-  Goal,
   Footprints,
   Flag,
   Shirt,
-  Map,
-  Star,
-  Medal,
   CheckCircle2,
 } from "lucide-react";
-import { Dialog, DialogContent } from "./ui/dialog";
+import { DialogContent } from "./ui/dialog";
 
 export default function About() {
   const clueCards = [
@@ -37,7 +30,7 @@ export default function About() {
   ];
 
   return (
-    <DialogContent className="sm:max-w-3xl w-[90vw] max-h-[85vh] overflow-y-auto p-0 bg-zinc-950 text-white border-3 border-white border-zinc-800">
+    <DialogContent className="sm:max-w-3xl w-[90vw] max-h-[85vh] overflow-y-auto p-0 bg-zinc-950 text-white border-3 border-white">
       <main className="min-h-screen bg-zinc-950 text-white">
         {/* Hero */}
         <section className="border-b border-zinc-800 px-10 py-6">
