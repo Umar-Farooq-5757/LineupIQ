@@ -1,7 +1,20 @@
 import PlayerCard from "./PlayerCard";
 
-const Pitch = ({ players }) => {
-  console.log(players[0]);
+interface Player {
+  id: string;
+  name: string;
+  shirtNumber: number;
+  position: string;
+  gridCoordinates: { x: number; y: number };
+  isHidden: boolean;
+  targetPlayerId?: string;
+  image: string;
+}
+interface PitchProps {
+  players: Player[][];
+}
+
+const Pitch = ({ players }: PitchProps) => {
   return (
     <section className="bg-[#01935C] w-135 h-160 rounded-md relative">
       {/* Drawing on the field */}
@@ -18,10 +31,10 @@ const Pitch = ({ players }) => {
       {/* Mapping players */}
       <div>
         <div className="flex flex-col justify-start gap-17 absolute inset-0 top-8">
-          {players.map((row, index) => {
+          {players.map((row: Player[], index: number) => {
             return (
               <div className="flex justify-evenly" key={index}>
-                {row.map((player, idx) => {
+                {row.map((player: Player, idx: number) => {
                   return (
                     <div key={idx}>
                       <PlayerCard name={player.name} src={player.image} />

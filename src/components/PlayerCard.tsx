@@ -1,4 +1,9 @@
-const PlayerCard = ({ name, src }) => {
+interface PlayerCardProps {
+  name: string;
+  src: string;
+}
+
+const PlayerCard = ({ name, src }: PlayerCardProps) => {
   return (
     <div>
       <div className="bg-[#008452] w-fit rounded-full mx-auto flex flex-col items-center p-2">
