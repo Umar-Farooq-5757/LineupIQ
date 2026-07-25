@@ -10,6 +10,9 @@ import LionelMessi from "../images/players/Lionel Messi.webp";
 import LuisSuárez from "../images/players/Luis Suárez.webp";
 import NeymarJr from "../images/players/Neymar Jr.webp";
 
+import barcelonaLogo from "../images/teams/barcelona.svg";
+import juventusLogo from "../images/teams/juventus.svg";
+
 const ucl2015Final = {
   matchId: "ucl-2015-final",
   puzzleNumber: 134,
@@ -21,13 +24,13 @@ const ucl2015Final = {
       name: "Barcelona",
       shortName: "BAR",
       score: 3,
-      logo: "/images/teams/barcelona.png",
+      logo: barcelonaLogo,
     },
     away: {
       name: "Juventus",
       shortName: "JUV",
       score: 1,
-      logo: "/images/teams/juventus.png",
+      logo: juventusLogo,
     },
   },
   pitch: {
