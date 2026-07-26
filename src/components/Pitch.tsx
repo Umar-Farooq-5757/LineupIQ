@@ -33,7 +33,7 @@ const Pitch = ({ players }: PitchProps) => {
 
   return (
     <div className="w-full max-w-md mx-auto">
-      <section className="bg-[#01935C] w-full aspect-[6/7] rounded-xl relative overflow-hidden shadow-2xl border border-emerald-600/30">
+      <section className="bg-[#01935C] w-full aspect-6/7 rounded-xl relative overflow-hidden shadow-2xl border border-emerald-600/30">
         {/* Pitch Markings */}
         {/* Top Penalty Area */}
         <div className="border-[#0D9F68] border-b-2 border-r-2 border-l-2 rounded-b-md w-1/2 h-[20%] mx-auto absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none">
@@ -80,7 +80,7 @@ const Pitch = ({ players }: PitchProps) => {
                         alt={player.isHidden ? "Hidden Player" : player.name}
                       />
                     </div>
-                    <span className="font-semibold text-xs sm:text-sm text-white drop-shadow-md text-center max-w-[70px] xs:max-w-[85px] truncate mt-1 leading-tight">
+                    <span className="font-semibold text-xs sm:text-sm text-white drop-shadow-md text-center max-w-17.5 xs:max-w-[85px] truncate mt-1 leading-tight">
                       {formatPlayerName(player.name, player.isHidden)}
                     </span>
                   </button>

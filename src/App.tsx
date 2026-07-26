@@ -40,7 +40,7 @@ function App() {
               </div>
 
               {/* Final Score */}
-              <div className="flex items-center justify-center gap-2 text-2xl sm:text-3xl font-extrabold bg-neutral-800/80 px-3 py-1 rounded-lg border border-neutral-700">
+              <div className="flex items-center justify-center gap-2 text-2xl sm:text-3xl font-extrabold px-3 py-1 rounded-lg">
                 <span>{data.teams.home.score}</span>
                 <span className="text-neutral-500 text-lg sm:text-xl">-</span>
                 <span>{data.teams.away.score}</span>
