@@ -59,6 +59,15 @@ const ucl2015Final = {
           image: DaniAlves,
         },
         {
+          id: "p4",
+          name: "Gerard Piqué",
+          shirtNumber: 3,
+          position: "CB",
+          gridCoordinates: { x: 38, y: 75 },
+          isHidden: false,
+          image: GerardPiqué,
+        },
+        {
           id: "p3",
           name: "Javier Mascherano",
           shirtNumber: 14,
@@ -67,15 +76,6 @@ const ucl2015Final = {
           isHidden: true,
           targetPlayerId: "mascherano-14",
           image: JavierMascherano,
-        },
-        {
-          id: "p4",
-          name: "Gerard Piqué",
-          shirtNumber: 3,
-          position: "CB",
-          gridCoordinates: { x: 38, y: 75 },
-          isHidden: false,
-          image: GerardPiqué,
         },
         {
           id: "p5",
