@@ -1,0 +1,27 @@
+const players = [
+  "Lionel Messi",
+  "Cristiano Ronaldo",
+  "Sergio Ramos",
+  "Casemiro",
+  "Luka Modrić",
+  "Karim Benzema",
+  "Toni Kroos",
+  "Marcelo",
+  "Xavi",
+  "Iniesta",
+  "Neymar",
+  "Luis Suárez",
+  "Gerard Piqué",
+  "Sergio Busquets",
+  "Robert Lewandowski",
+  "Mohamed Salah",
+  "Kevin De Bruyne",
+  "Virgil van Dijk",
+  "Erling Haaland",
+  "Kylian Mbappé",
+  "Ángel Di María",
+  "Enzo Fernández",
+  "Julián Álvarez",
+];
+
+export default players;

@@ -1,13 +1,15 @@
-import { useAppContext } from "@/context/AppContext";
-import anonymousImage from "../data/images/players/anonymous.webp";
-import GuessingBox from "./GuessingBox";
+import PlayerCard from "./PlayerCard";
+import { useGame, type HiddenPlayer } from "@/context/GameContext";
 
 interface Player {
   id: string;
   name: string;
   shirtNumber: number;
   position: string;
-  gridCoordinates: { x: number; y: number };
+  gridCoordinates: {
+    x: number;
+    y: number;
+  };
   isHidden: boolean;
   targetPlayerId?: string;
   image: string;
@@ -15,82 +17,71 @@ interface Player {
 
 interface PitchProps {
   players: Player[][];
+  hiddenPlayersData: HiddenPlayer[];
 }
 
-const Pitch = ({ players }: PitchProps) => {
-  const { setIsGuessingBoxOpen } = useAppContext();
+const Pitch = ({ players, hiddenPlayersData }: PitchProps) => {
+  const { setSelectedPlayer, foundPlayers } = useGame();
 
-  const openGuessingBox = (player: Player) => {
-    if (player.isHidden) {
-      setIsGuessingBoxOpen(true);
-    }
-  };
+  const handleSelectPlayer = (player: Player) => {
+    if (!player.isHidden || !player.targetPlayerId) return;
 
-  const formatPlayerName = (name: string, isHidden: boolean) => {
-    if (isHidden) return "?";
-    return name.includes(" ") ? name.replace(/^\S+\s*/, "") : name;
+    if (foundPlayers.includes(player.targetPlayerId)) return;
+
+    const hiddenPlayer = hiddenPlayersData.find(
+      (p) => p.targetPlayerId === player.targetPlayerId,
+    );
+
+    if (!hiddenPlayer) return;
+
+    setSelectedPlayer(hiddenPlayer);
   };
 
   return (
-    <div className="w-full max-w-md mx-auto">
-      <section className="bg-[#01935C] w-full aspect-6/7 rounded-xl relative overflow-hidden shadow-2xl border border-emerald-600/30">
+    <div className="mx-auto w-full max-w-lg">
+      <section className="relative mx-auto aspect-[6/7] w-full overflow-hidden rounded-2xl border border-emerald-500/20 bg-[#0D8A58] shadow-2xl">
+        {/* ===================== */}
         {/* Pitch Markings */}
-        {/* Top Penalty Area */}
-        <div className="border-[#0D9F68] border-b-2 border-r-2 border-l-2 rounded-b-md w-1/2 h-[20%] mx-auto absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none">
-          <div className="border-[#0D9F68] border-b-2 border-r-2 border-l-2 rounded-b-md w-1/2 h-[50%] mx-auto absolute top-0 left-1/2 -translate-x-1/2" />
+        {/* ===================== */}
+
+        {/* Top Penalty Box */}
+        <div className="absolute left-1/2 top-0 h-[20%] w-1/2 -translate-x-1/2 border-x border-b border-[#28B377] sm:border-x-2 sm:border-b-2">
+          <div className="absolute left-1/2 top-0 h-1/2 w-1/2 -translate-x-1/2 border-x border-b border-[#28B377] sm:border-x-2 sm:border-b-2" />
         </div>
 
-        {/* Center Circle & Line */}
-        <div className="pointer-events-none">
-          <div className="w-[30%] aspect-square rounded-full absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 border-[#0D9F68] border-2" />
-          <div className="bg-[#0D9F68] w-full h-0.5 absolute top-1/2 -translate-y-1/2" />
+        {/* Center Circle */}
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute left-1/2 top-1/2 aspect-square h-[30%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#28B377] sm:border-2" />
+
+          <div className="absolute top-1/2 h-px w-full -translate-y-1/2 bg-[#28B377]" />
+
+          <div className="absolute left-1/2 top-1/2 size-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#28B377] sm:size-2" />
         </div>
 
-        {/* Bottom Penalty Area */}
-        <div className="border-[#0D9F68] border-t-2 border-r-2 border-l-2 rounded-t-md w-1/2 h-[20%] mx-auto absolute bottom-0 left-1/2 -translate-x-1/2 pointer-events-none">
-          <div className="border-[#0D9F68] border-t-2 border-r-2 border-l-2 rounded-t-md w-1/2 h-[50%] mx-auto absolute bottom-0 left-1/2 -translate-x-1/2" />
+        {/* Bottom Penalty Box */}
+        <div className="absolute bottom-0 left-1/2 h-[20%] w-1/2 -translate-x-1/2 border-x border-t border-[#28B377] sm:border-x-2 sm:border-t-2">
+          <div className="absolute bottom-0 left-1/2 h-1/2 w-1/2 -translate-x-1/2 border-x border-t border-[#28B377] sm:border-x-2 sm:border-t-2" />
         </div>
 
-        {/* Players Overlay */}
-        <div className="absolute inset-0 p-2 sm:p-4 flex flex-col justify-between py-4 z-10">
-          {players.map((row: Player[], rowIndex: number) => (
-            <div className="flex justify-around items-center w-full" key={rowIndex}>
-              {row.map((player: Player) => {
-                const isClickable = player.isHidden;
-                return (
-                  <button
-                    type="button"
-                    onClick={() => openGuessingBox(player)}
-                    key={player.id || `${rowIndex}-${player.name}`}
-                    disabled={!isClickable}
-                    className={`flex flex-col items-center group transition-transform active:scale-95 focus:outline-none ${
-                      isClickable ? "cursor-pointer" : "cursor-default"
-                    }`}
-                  >
-                    <div
-                      className={`bg-[#008452] rounded-full p-1 border shadow-md transition-all ${
-                        isClickable
-                          ? "border-amber-300 ring-2 ring-amber-400/30 group-hover:scale-105"
-                          : "border-emerald-400/30"
-                      }`}
-                    >
-                      <img
-                        className="size-8 xs:size-10 sm:size-12 object-cover rounded-full"
-                        src={player.isHidden ? anonymousImage : player.image}
-                        alt={player.isHidden ? "Hidden Player" : player.name}
-                      />
-                    </div>
-                    <span className="font-semibold text-xs sm:text-sm text-white drop-shadow-md text-center max-w-17.5 xs:max-w-[85px] truncate mt-1 leading-tight">
-                      {formatPlayerName(player.name, player.isHidden)}
-                    </span>
-                  </button>
-                );
-              })}
+        {/* ===================== */}
+        {/* Players */}
+        {/* ===================== */}
+
+        <div className="absolute inset-0 z-10 flex flex-col justify-between px-2 py-3 sm:px-4 sm:py-5 md:px-5 md:py-6 lg:px-6 lg:py-7">
+          {players.map((row, rowIndex) => (
+            <div
+              key={rowIndex}
+              className="flex w-full items-center justify-evenly gap-1 sm:gap-2 md:gap-3">
+              {row.map((player) => (
+                <PlayerCard
+                  key={player.id}
+                  player={player}
+                  onSelect={handleSelectPlayer}
+                />
+              ))}
             </div>
           ))}
         </div>
-
-        <GuessingBox />
       </section>
     </div>
   );

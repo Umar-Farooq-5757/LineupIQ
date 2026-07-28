@@ -1,6 +1,6 @@
 import { Footprints, Flag, Shirt, CheckCircle2 } from "lucide-react";
 import { Dialog, DialogContent } from "./ui/dialog";
-import { useAppContext } from "@/context/AppContext";
+import { useGame } from "@/context/GameContext";
 
 export default function About() {
   const clueCards = [
@@ -24,7 +24,7 @@ export default function About() {
       description: "Reveals the shirt number worn in that specific match.",
     },
   ];
-  const { isAboutOpen, setIsAboutOpen } = useAppContext();
+  const { isAboutOpen, setIsAboutOpen } = useGame();
   return (
     <Dialog open={isAboutOpen} onOpenChange={setIsAboutOpen}>
       <DialogContent className="sm:max-w-3xl w-[95vw] max-h-[90vh] overflow-y-auto p-0 bg-[#1a1a1a] text-white border-2 sm:border-3 border-zinc-700 rounded-lg">
