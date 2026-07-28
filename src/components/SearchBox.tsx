@@ -48,7 +48,7 @@ export default function SearchBox() {
 
     const correct = submitGuess(name);
 
-    if (correct) {
+    if (correct && player) {
       openRevealModal(player, 100);
     }
 
@@ -68,7 +68,7 @@ export default function SearchBox() {
 
     const revealed = revealPlayer();
 
-    if (revealed) {
+    if (revealed && player) {
       openRevealModal(player, 0);
     }
 
