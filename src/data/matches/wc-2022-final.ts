@@ -177,18 +177,12 @@ const wc22Final = {
           value: "Argentina",
           flag: "🇦🇷",
         },
-        { attempt: 2, type: "position", value: "CM / CDM" },
         {
-          attempt: 3,
+          attempt: 2,
           type: "careerPath",
           value: ["River Plate", "Defense y Justicia", "Benfica", "Chelsea"],
         },
-        { attempt: 4, type: "shirtNumber", value: 24 },
-        {
-          attempt: 5,
-          type: "heatmap",
-          value: "/images/heatmaps/enzo-2022.png",
-        },
+        { attempt: 3, type: "shirtNumber", value: 24 },
       ],
     },
     {
@@ -218,9 +212,8 @@ const wc22Final = {
           value: "Argentina",
           flag: "🇦🇷",
         },
-        { attempt: 2, type: "position", value: "LW / RW" },
         {
-          attempt: 3,
+          attempt: 2,
           type: "careerPath",
           value: [
             "Rosario Central",
@@ -231,12 +224,7 @@ const wc22Final = {
             "Juventus",
           ],
         },
-        { attempt: 4, type: "shirtNumber", value: 11 },
-        {
-          attempt: 5,
-          type: "heatmap",
-          value: "/images/heatmaps/dimaria-2022.png",
-        },
+        { attempt: 3, type: "shirtNumber", value: 11 },
       ],
     },
   ],

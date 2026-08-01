@@ -8,7 +8,6 @@ import CorrectGuessModal from "./CorrectGuessModal";
 export default function SearchBox() {
   const { selectedPlayer, submitGuess, revealedHints, revealPlayer } =
     useGame();
-
   const [query, setQuery] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(0);
 
@@ -27,7 +26,6 @@ export default function SearchBox() {
       .filter((player) =>
         player.toLowerCase().includes(query.trim().toLowerCase()),
       )
-      .slice(0, 6);
   }, [query]);
 
   if (!selectedPlayer) return null;

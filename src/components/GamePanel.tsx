@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Crosshair, Trophy } from "lucide-react";
+import { ArrowRight, Crosshair, Trophy } from "lucide-react";
 
 import anonymousImage from "@/data/images/players/anonymous.webp";
 import { useGame } from "@/context/GameContext";
@@ -12,9 +12,10 @@ import GameCompleteModal from "./GameCompleteModal";
 
 interface Props {
   hiddenCount: number;
+  trivia:string;
 }
 
-export default function GamePanel({ hiddenCount }: Props) {
+export default function GamePanel({ hiddenCount,trivia }: Props) {
   const {
     selectedPlayer,
     foundPlayers,
@@ -23,6 +24,9 @@ export default function GamePanel({ hiddenCount }: Props) {
     wrongGuesses,
     revealedHints,
     resetGame,
+    nextLevel,
+    hasNextLevel,
+    isMatchCompleted,
   } = useGame();
 
   const remaining = hiddenCount - foundPlayers.length;
@@ -113,7 +117,19 @@ export default function GamePanel({ hiddenCount }: Props) {
         {selectedPlayer && <SearchBox />}
 
         {selectedPlayer && <HintList />}
+        <div className="flex flex-col gap-4">
+          {/* If puzzle is complete, show Next Level button directly in the side panel */}
+          {isMatchCompleted && (
+            <button
+              onClick={nextLevel}
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-green-500 py-3 font-bold text-black transition hover:bg-green-400">
+              <span>Continue to Next Level</span>
+              <ArrowRight size={18} />
+            </button>
+          )}
 
+          {/* Rest of your GamePanel component */}
+        </div>
         <section className="rounded-2xl border border-neutral-800 bg-[#1a1a1a] p-5 shadow-lg">
           <div className="flex items-center gap-2">
             <Trophy className="size-5 text-yellow-400" />
@@ -136,6 +152,12 @@ export default function GamePanel({ hiddenCount }: Props) {
         wrongGuesses={wrongGuesses}
         hintsUsed={hintsUsed}
         onPlayAgain={playAgain}
+        onNextLevel={() => {
+          nextLevel();
+          setShowCompleteModal(false);
+        }}
+        hasNextLevel={hasNextLevel}
+        trivia={trivia}
       />
     </>
   );

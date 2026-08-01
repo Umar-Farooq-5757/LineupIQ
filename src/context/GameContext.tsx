@@ -1,8 +1,10 @@
+import { MATCHES } from "@/data/matches";
 import {
   createContext,
   useContext,
   useMemo,
   useState,
+  useEffect,
   type ReactNode,
 } from "react";
 
@@ -15,7 +17,6 @@ export interface ProgressiveClue {
 
 export interface HiddenPlayer {
   targetPlayerId: string;
-
   identity: {
     name: string;
     nationality: string;
@@ -26,7 +27,6 @@ export interface HiddenPlayer {
     position: string;
     image: string;
   };
-
   matchStats: {
     minutesPlayed: number;
     goals: number;
@@ -35,8 +35,22 @@ export interface HiddenPlayer {
     redCards: number;
     rating: number;
   };
-
   progressiveClues: ProgressiveClue[];
+}
+
+export interface MatchData {
+  id?: string;
+  title: string;
+  date: string;
+  teams: {
+    home: { name: string; logo: string; score: number };
+    away: { name: string; logo: string; score: number };
+  };
+  pitch: {
+    players: any[];
+  };
+  hiddenPlayersData: HiddenPlayer[];
+  matchFacts: { trivia: string };
 }
 
 interface GameContextType {
@@ -55,43 +69,67 @@ interface GameContextType {
   revealedHints: Record<string, number>;
 
   revealNextHint(): void;
-
   revealPlayer(): HiddenPlayer | null;
-
   submitGuess(name: string): boolean;
-
   resetGame(): void;
 
   isAboutOpen: boolean;
   setIsAboutOpen: React.Dispatch<React.SetStateAction<boolean>>;
+
+  currentLevelIndex: number;
+  currentMatch: MatchData;
+  hasNextLevel: boolean;
+  nextLevel(): void;
+  isMatchCompleted: boolean;
 }
+
+const STORAGE_KEY = "lineup_iq_level_index";
 
 const GameContext = createContext<GameContextType | null>(null);
 
 export function GameProvider({ children }: { children: ReactNode }) {
+  // 1. Initialize level index from localStorage if available
+  const [currentLevelIndex, setCurrentLevelIndex] = useState<number>(() => {
+    const savedLevel = localStorage.getItem(STORAGE_KEY);
+    if (savedLevel !== null) {
+      const parsed = parseInt(savedLevel, 10);
+      if (!isNaN(parsed) && parsed >= 0 && parsed < MATCHES.length) {
+        return parsed;
+      }
+    }
+    return 0;
+  });
+
+  // 2. Save level index to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, currentLevelIndex.toString());
+  }, [currentLevelIndex]);
+
+  const currentMatch = MATCHES[currentLevelIndex];
+  const hasNextLevel = MATCHES.length > 0;
+
   const [selectedPlayer, setSelectedPlayer] = useState<HiddenPlayer | null>(
     null,
   );
-
   const [score, setScore] = useState(500);
-
   const [foundPlayers, setFoundPlayers] = useState<string[]>([]);
-
   const [revealedHints, setRevealedHints] = useState<Record<string, number>>(
     {},
   );
-
   const [guesses, setGuesses] = useState(0);
-
   const [wrongGuesses, setWrongGuesses] = useState(0);
-
   const [isAboutOpen, setIsAboutOpen] = useState(false);
+
+  const isMatchCompleted =
+    currentMatch?.hiddenPlayersData.length > 0 &&
+    currentMatch.hiddenPlayersData.every((player) =>
+      foundPlayers.includes(player.targetPlayerId),
+    );
 
   function revealNextHint() {
     if (!selectedPlayer) return;
 
     const id = selectedPlayer.targetPlayerId;
-
     const revealed = revealedHints[id] ?? 0;
 
     if (revealed >= selectedPlayer.progressiveClues.length) return;
@@ -112,11 +150,8 @@ export function GameProvider({ children }: { children: ReactNode }) {
     }
 
     const player = selectedPlayer;
-
     setScore((s) => Math.max(0, s - 50));
-
     setFoundPlayers((prev) => [...prev, player.targetPlayerId]);
-
     setSelectedPlayer(null);
 
     return player;
@@ -137,16 +172,12 @@ export function GameProvider({ children }: { children: ReactNode }) {
 
     if (correct) {
       setFoundPlayers((prev) => [...prev, selectedPlayer.targetPlayerId]);
-
       setScore((s) => s + 100);
-
       setSelectedPlayer(null);
-
       return true;
     }
 
     setWrongGuesses((g) => g + 1);
-
     setScore((s) => Math.max(0, s - 15));
 
     return false;
@@ -161,31 +192,34 @@ export function GameProvider({ children }: { children: ReactNode }) {
     setWrongGuesses(0);
   }
 
+  function nextLevel() {
+    if (MATCHES.length === 0) return;
+    setCurrentLevelIndex((prevIndex) => (prevIndex + 1) % MATCHES.length);
+    resetGame();
+  }
+
   const value = useMemo(
     () => ({
       selectedPlayer,
       setSelectedPlayer,
-
       score,
       setScore,
-
       foundPlayers,
       setFoundPlayers,
-
       guesses,
       wrongGuesses,
-
       revealedHints,
-
       revealNextHint,
       revealPlayer,
-
       submitGuess,
-
       resetGame,
-
       isAboutOpen,
       setIsAboutOpen,
+      currentLevelIndex,
+      currentMatch,
+      hasNextLevel,
+      nextLevel,
+      isMatchCompleted,
     }),
     [
       selectedPlayer,
@@ -195,6 +229,10 @@ export function GameProvider({ children }: { children: ReactNode }) {
       wrongGuesses,
       revealedHints,
       isAboutOpen,
+      currentLevelIndex,
+      currentMatch,
+      hasNextLevel,
+      isMatchCompleted,
     ],
   );
 
