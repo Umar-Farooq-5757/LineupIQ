@@ -1,4 +1,3 @@
-// GameCompleteModal.tsx
 import {
   Trophy,
   Target,
@@ -44,7 +43,7 @@ export default function GameCompleteModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg border-neutral-700 bg-[#191919] text-white">
+      <DialogContent className="h-dvh w-screen max-w-none rounded-none border-none bg-[#191919] text-white p-6 overflow-y-auto sm:h-auto sm:max-w-lg sm:rounded-lg sm:border sm:border-neutral-700">
         <div className="py-3">
           <div className="flex justify-center">
             <div className="rounded-full bg-yellow-500/15 p-5">
